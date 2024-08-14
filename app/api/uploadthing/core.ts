@@ -7,7 +7,6 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { pinecone } from "@/lib/pinecone";
 import { PineconeStore } from "@langchain/pinecone";
-import { createDiffieHellmanGroup } from "crypto";
 
 const f = createUploadthing();
 

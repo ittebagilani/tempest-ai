@@ -5,8 +5,14 @@ const nextConfig = {
     config.resolve.alias.encoding = false;
     return config;
   },
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
