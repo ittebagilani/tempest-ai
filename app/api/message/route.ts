@@ -15,7 +15,6 @@ export const POST = async (req: NextRequest) => {
   const { getUser } = getKindeServerSession();
 
   const user = await getUser();
-  console.log(user);
 
   const userId = user?.id;
 
