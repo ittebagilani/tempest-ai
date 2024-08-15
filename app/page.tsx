@@ -1,5 +1,6 @@
 import MaxWidthWrapper from "@/components/max-width-wrapper";
 import { buttonVariants } from "@/components/ui/button";
+import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,15 +23,14 @@ export default function Home() {
           upload your file and start asking questions right away.
         </p>
 
-        <Link
-          href="/dashboard"
+        <LoginLink
           className={buttonVariants({
             size: "lg",
             className: "mt-5 bg-[#da2877] hover:bg-[#da2877]/80 text-white",
           })}
         >
           Get Started <ArrowRight className="ml-2 h-5 w-5" />
-        </Link>
+        </LoginLink>
       </MaxWidthWrapper>
 
       {/* value proposition section */}
