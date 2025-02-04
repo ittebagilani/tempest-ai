@@ -8,7 +8,6 @@ import { Cloud, FileIcon, Loader2 } from "lucide-react";
 import { Progress } from "./ui/progress";
 import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "./ui/use-toast";
-import { trpc } from "@/app/_trpc/client";
 import { useRouter } from "next/navigation";
 
 const UploadDropzone = () => {
@@ -19,14 +18,6 @@ const UploadDropzone = () => {
   const { toast } = useToast();
 
   const { startUpload } = useUploadThing("pdfUploader");
-
-  const { mutate: startPolling } = trpc.getFile.useMutation({
-    onSuccess: (file) => {
-      router.push(`/dashboard/${file.id}`);
-    },
-    retry: true,
-    retryDelay: 500,
-  });
 
   const startSimulatedProgress = () => {
     setUploadProgress(0);
@@ -62,7 +53,6 @@ const UploadDropzone = () => {
         }
 
         const [fileResponse] = res;
-
         const key = fileResponse?.key;
 
         if (!key) {
@@ -74,10 +64,24 @@ const UploadDropzone = () => {
         }
 
         clearInterval(progressInterval);
-
         setUploadProgress(100);
 
-        startPolling({ key });
+        // Fetch file details from the backend
+        try {
+          const response = await fetch(`/api/files/${key}`);
+          const file = await response.json();
+
+          if (file?.id) {
+            router.push(`/dashboard/${file.id}`);
+          }
+        } catch (error) {
+          console.error("Error fetching file:", error);
+          toast({
+            title: "Upload successful, but failed to load file",
+            description: "Please refresh the page.",
+            variant: "destructive",
+          });
+        }
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -85,15 +89,12 @@ const UploadDropzone = () => {
           {...getRootProps()}
           className="border h-64 m-4 border-dashed border-gray-300 rounded-lg cursor-pointer"
         >
-          <input
-            {...getInputProps()}
-            className="hidden"
-          />
+          <input {...getInputProps()} className="hidden" />
           <div className="flex flex-col items-center justify-center h-full w-full">
             <Cloud className="h-6 w-6 text-zinc-500 mb-2" />
             <p className="mb-2 text-sm text-zinc-700">
-              <span className="font-semibold">Click to upload</span> or drag
-              and drop.
+              <span className="font-semibold">Click to upload</span> or drag and
+              drop.
             </p>
             <p className="text-xs text-zinc-500">PDF (up to 4 MB)</p>
             {acceptedFiles && acceptedFiles[0] && (

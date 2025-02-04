@@ -2,7 +2,6 @@ import ChatWrapper from "@/components/chat/chat-wrapper";
 import PDFRenderer from "@/components/pdf-renderer";
 import { db } from "@/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { TRPCError } from "@trpc/server";
 import { notFound, redirect } from "next/navigation";
 
 interface PageProps {
